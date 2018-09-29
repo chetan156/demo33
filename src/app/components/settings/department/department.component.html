@@ -1,0 +1,81 @@
+<div class="card bg-secondary text-white  mt-2" *ngIf="action=='add' || action=='edit'">
+  <div class="card-header">
+    <strong>Department</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+      <div class="form-row">
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('departmentName')">
+          <label for="departmentName">Department</label>
+          <input type="text" class="form-control" id="departmentName" formControlName="departmentName" placeholder="Department">
+          <app-field-error-display [displayError]="isFieldValid('departmentName')" errorMsg="Department is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('departmentDescription')">
+          <label for="departmentDescription">Description</label>
+          <input type="text" class="form-control" id="departmentDescription" formControlName="departmentDescription" placeholder="Description">
+          <app-field-error-display [displayError]="isFieldValid('departmentDescription')" errorMsg="Description is required"></app-field-error-display>
+        </div>
+      </div>
+      <div class="form-group col-md-12 text-right">
+        <button type="button" class="btn btn-" title="Back to Job Posting List" (click)="goBack()">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <button type="submit" class="btn btn-success" title="Save Department Posting" [disabled]="!departmentForm.valid">
+          <i class="fa fa-save" aria-hidden="true"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card bg-secondary text-white mt-2" *ngIf="action=='list'">
+  <div class="card-header">
+    <strong>Department</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <div *ngIf="action=='list'" class="row">
+      <div class="col-md-6 text-left">
+        <button type="button" class="btn btn-info" title="Add" (click)="add()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add
+        </button>
+      </div>
+      <div class="col-md-6 text-right">
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <p-table #dt [columns]="cols" [value]="gridData" [paginator]="true" [rows]="10" [resizableColumns]="true" autoLayout="true"
+              [globalFilterFields]="['departmentName','departmentDescription']">
+            <ng-template pTemplate="caption">
+                <div style="text-align: right">
+                  <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                  <input type="text" pInputText size="20" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                </div>
+              </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field" *ngIf="col.header!='Action' && col.header != 'Sr.No'"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-columns="columns" let-i="rowIndex">
+              <tr>
+                <td style="width: 5em;">{{i + 1}}</td>
+                <td style="width: 15em;">{{ data.departmentName }}</td>
+                <td>{{ data.departmentDescription }}</td>
+                <td style="width: 6em;" class="text-center">
+                  <button type="button" class="btn btn-info btn-sm" title="Edit" (click)="edit(data.departmentId)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

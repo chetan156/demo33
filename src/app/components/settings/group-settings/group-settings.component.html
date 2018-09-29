@@ -1,0 +1,46 @@
+<div class="card bg-secondary text-white mt-2">
+  <div class="card-header">
+    <strong>Group Settings</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <p-table #dt [columns]="cols" [value]="gridData" [paginator]="true" [rows]="10" [resizableColumns]="true" autoLayout="true"
+            [globalFilterFields]="['groupName','text','value','description']">
+            <ng-template pTemplate="caption">
+              <div style="text-align: right">
+                <label for="GroupName">Group Name</label>
+                <select style="width:10em;height:1.8em; margin:4px 4px 0 4px" (change)="getGroupNameDetails($event.target.value)">
+                  <option selected></option>
+                  <option *ngFor="let groupName of distinctGroupNames" [value]="groupName">
+                    {{ groupName }}
+                  </option>
+                </select>
+                <i class="fa fa-search" style="margin:4px 4px 0 15px"></i>
+                <input type="text" pInputText size="20" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field" *ngIf="col.header != 'Sr.No'"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-columns="columns" let-i="rowIndex">
+              <tr>
+                <td style="width: 4em;">{{i + 1}}</td>
+                <td style="width: 8em;">{{ data.groupName }}</td>
+                <td style="width: 7em;">{{ data.text }}</td>
+                <td style="width: 7em;">{{ data.value }}</td>
+                <td>{{ data.description }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<div class="card bg-secondary text-white  mt-2" *ngIf="action=='add' || action=='edit'">
+  <div class="card-header">
+    <strong>Job Posting</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <form [formGroup]="jobPostingForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+      <div class="form-row">
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('jobCode')">
+          <label for="jobCode">Job Code</label>
+          <input type="text" class="form-control" id="jobCode" formControlName="jobCode" placeholder="Job Code">
+          <app-field-error-display [displayError]="isFieldValid('jobCode')" errorMsg="Job Code is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('jobDescription')">
+          <label for="jobDescription">Job Description</label>
+          <input type="text" class="form-control" id="jobDescription" formControlName="jobDescription" placeholder="Job Description">
+          <app-field-error-display [displayError]="isFieldValid('jobDescription')" errorMsg="Job Description is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('positionId')">
+          <label for="positionId">Position</label>
+          <select id="positionId" class="form-control" formControlName="positionId" name="positionId">
+            <option selected></option>
+            <option *ngFor="let position of allPositionModel" [value]="position.systemCodeID">
+              {{ position.text }}
+            </option>
+          </select>
+          <app-field-error-display [displayError]="isFieldValid('positionId')" errorMsg="Position is required"></app-field-error-display>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('expiryDate')">
+          <label for="expiryDate">Expiry Date</label><br>
+          <p-calendar formControlName="expiryDate" dateFormat="yy-mm-dd" [minDate]="minDate" [showIcon]="true"></p-calendar>
+          <app-field-error-display [displayError]="isFieldValid('expiryDate')" errorMsg="Expiry Date is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4 text-left">
+          <label for="IsExpired">Is Expired</label>
+          <input type="checkbox" class="form-control" id="isExpired" formControlName="isExpired" style="width:3%">
+        </div>
+      </div>
+      <div class="form-group col-md-12 text-right">
+        <button type="button" class="btn btn-" title="Back to Job Posting List" (click)="goBack()">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <button type="submit" class="btn btn-success" title="Save Job Posting" [disabled]="!jobPostingForm.valid">
+          <i class="fa fa-save" aria-hidden="true"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card bg-secondary text-white mt-2" *ngIf="action=='list'">
+  <div class="card-header">
+    <strong>Job Posting</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <div *ngIf="action=='list'" class="row">
+      <div class="col-md-6 text-left">
+        <button type="button" class="btn btn-info" title="Add Job Posting" (click)="add()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add
+        </button>
+      </div>
+      <div class="col-md-6 text-right">
+          Note:
+          <i class="fa fa-check" aria-hidden="true" style="color:red"></i> Yes
+          &nbsp;
+          <i class="fa fa-remove" aria-hidden="true" style="color:green"></i> No
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="table-responsive">
+            <p-table #dt [columns]="cols" [value]="gridData" [paginator]="true" [rows]="10" 
+              [globalFilterFields]="['jobCode','jobDescription','position','expiryDate']" [resizableColumns]="true" autoLayout="true">
+                <ng-template pTemplate="caption">
+                  <div style="text-align: right">
+                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    <input type="text" pInputText size="20" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field" *ngIf="col.header!='Action' && col.header != 'Sr.No'"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data let-columns="columns" let-i="rowIndex">
+                    <tr>
+                        <td style="width: 2em;">{{i + 1}}</td>
+                        <td style="width: 10em;">{{ data.jobCode }}</td>
+                        <td style="width: 32em;">{{ data.jobDescription }}</td>
+                        <td style="width: 32em;">{{ data.position }}</td>                
+                        <td style="width: 9em;" class="text-right">{{ data.expiryDate | date:'yyyy-MM-dd' }}</td>
+                        <td style="width: 9em;" class="text-center">
+                          <i [ngStyle]="{'color':data.isExpired === false ? 'red' : 'green' }" class="fa {{ data.isExpired === false ? 'fa-check' : 'fa-remove' }}"
+                            title="{{ data.isExpired === false ? 'Yes' : 'No' }}" aria-hidden="true"></i>
+                        </td>
+                        <td style="width: 6em;" class="text-center">
+                          <button type="button" class="btn btn-info btn-sm" title="Edit Job Posting" (click)="edit(data.jobPostingId)">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                          </button>
+                          <button type="button" class="btn btn-info btn-sm" title="Delete Job Posting" 
+                            (click)="remove(data.jobPostingId)">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

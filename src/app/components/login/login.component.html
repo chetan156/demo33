@@ -1,0 +1,40 @@
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <div class="login100-form-title" [ngStyle]="{'background-image': 'url(' + fullImagePath + ')'}" style="background-image: url(../);">
+        <span class="login100-form-title-1">
+          QMCPL-RMS
+        </span>
+      </div>
+      <form class="login100-form validate-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="wrap-input100 validate-input m-b-26">
+          <span class="label-input100">Email Id</span>
+          <input class="input100" type="text" name="EmailId" placeholder="Enter Email Id" formControlName="EmailId">
+          <span class="focus-input100"></span>
+        </div>
+         <!-- <div class="error-msg" *ngIf="!loginForm.controls['EmailId'].hasError('required') && loginForm.controls['EmailId'].touched">
+            Email-Id is required
+          </div>  -->
+         <div class="error-msg" *ngIf="!loginForm.controls['EmailId'].valid && loginForm.controls['EmailId'].touched">
+          Email-Id is required
+        </div> 
+        <div class="alert" *ngIf="loginForm.controls['EmailId'].hasError('email') && loginForm.controls['EmailId'].touched">
+          Enter valid email
+        </div>
+        <div class="wrap-input100 validate-input m-b-18">
+          <span class="label-input100">Password</span>
+          <input class="input100" type="password" placeholder="Enter Password" formControlName="Password">
+          <span class="focus-input100"> </span>
+        </div>
+        <div class="error-msg" *ngIf="!loginForm.controls['Password'].valid && loginForm.controls['Password'].touched">
+          Password is required
+        </div>
+        <div class="container-login100-form-btn">
+          <button class="login100-form-btn" type="submit" [disabled]="loginForm.invalid">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="card bg-secondary text-white  mt-2" *ngIf="action=='add' || action=='edit'">
+  <div class="card-header">
+    <strong>Candidate</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <form [formGroup]="candidateForm" (ngSubmit)="onSubmit()" class="form-horizontal">
+      <div class="form-row">
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('jobPostingId')">
+          <label for="jobPostingId">Job Post</label>
+          <select id="jobPostingId" class="form-control" formControlName="jobPostingId" name="jobPostingId">
+            <option selected></option>
+            <option *ngFor="let position of jobpostingModel" [value]="position.jobPostingId">
+              {{ position.jobCode }}
+            </option>
+          </select>
+          <app-field-error-display [displayError]="isFieldValid('jobPostingId')" errorMsg="Position is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('firstName')">
+          <label for="firstName">First Name</label>
+          <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+          <app-field-error-display [displayError]="isFieldValid('firstName')" errorMsg="First Name is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('lastName')">
+          <label for="lastName">Last Name</label>
+          <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+          <app-field-error-display [displayError]="isFieldValid('lastName')" errorMsg="Last Name  is required"></app-field-error-display>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-3" [ngClass]="displayFieldCss('emailId')">
+          <label for="emailId">Email Id</label>
+          <input type="text" class="form-control" id="emailId" formControlName="emailId" placeholder="Email Id">
+          <app-field-error-display [displayError]="isFieldValid('emailId')" errorMsg="Email Id is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-3" [ngClass]="displayFieldCss('alternateEmailId')">
+          <label for="alternateEmailId">Alternate Email Id</label>
+          <input type="text" class="form-control" id="lastName" formControlName="alternateEmailId" placeholder="Alternate Email Id">
+          <app-field-error-display [displayError]="isFieldValid('alternateEmailId')" errorMsg="Alternate Email Id is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-3" [ngClass]="displayFieldCss('primaryContactNumber')">
+          <label for="primaryContactNumber">Contact No</label> 
+          <input type="text" class="form-control" id="primaryContactNumber" formControlName="primaryContactNumber" placeholder="Primary Contact No ">
+          <app-field-error-display [displayError]="isFieldValid('primaryContactNumber')" errorMsg="Contact No is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-3" [ngClass]="displayFieldCss('secondaryContactNumber')">
+            <label for="secondaryContactNumber">Alternate Contact No</label>
+            <input type="text" class="form-control" id="secondaryContactNumber" formControlName="secondaryContactNumber" placeholder="Alternate Contact No">
+            <app-field-error-display [displayError]="isFieldValid('secondaryContactNumber')" errorMsg="Alternate Contact No required"></app-field-error-display>
+          </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3" [ngClass]="displayFieldCss('candidateTechnicalSkills')">
+            <label for="emailId">Technical Skills</label><br>
+            <p-multiSelect [options]="tSkills" [panelStyle]="{minWidth:'12em'}" maxSelectedLabels="10"  formControlName="candidateTechnicalSkills"></p-multiSelect>
+          </div>           
+      </div>
+
+      <div class="form-group col-md-12 text-right">
+        <button type="button" class="btn btn-" title="Back to List" (click)="goBack()">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <button type="submit" class="btn btn-success" title="Save" [disabled]="!candidateForm.valid">
+          <i class="fa fa-save" aria-hidden="true"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="card bg-secondary text-white mt-2" *ngIf="action=='list'">
+  <div class="card-header">
+    <strong>Candidate</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <div *ngIf="action=='list'" class="row">
+      <div class="col-md-6 text-left">
+        <button type="button" class="btn btn-info" title="Add Candidate" (click)="add()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add
+        </button>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <p-table #dt [columns]="cols" [value]="gridData" [paginator]="true" [rows]="10" [resizableColumns]="true" autoLayout="true"
+            [globalFilterFields]="['firstName','lastName','emailId','primaryContactNumber','secondaryContactNumber']">
+            <ng-template pTemplate="caption">
+              <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="20" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field" *ngIf="col.header!='Action' && col.header != 'Sr.No'"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-columns="columns" let-i="rowIndex">
+              <tr>
+                <td style="width: 5em;">{{i + 1}}</td>
+                <td style="width: 10em;">{{ data.firstName }}</td>
+                <td>{{ data.lastName }}</td>
+                <td>{{ data.emailId }}</td>
+                <td>{{ data.primaryContactNumber }}</td>
+                <td>{{ data.secondaryContactNumber }}</td> 
+                <td style="width: 6em;" class="text-center">
+                  <button type="button" class="btn btn-info btn-sm" title="Edit Job Posting" (click)="edit(data.candidateId)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-info btn-sm" title="Delete Job Posting" (click)="remove(data.candidateId)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

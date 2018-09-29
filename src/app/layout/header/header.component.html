@@ -1,0 +1,48 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+  <a class="navbar-brand" routerLink="#">
+      <img src="../../../assets/images/recruitment.png" width="30" height="30" alt=""> RMS
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" >
+        <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"  >Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/job-posting" routerLinkActive="active"  >Job Posting</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/candidate" routerLinkActive="active"  >Candidate</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/user" routerLinkActive="active"  >User</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/interview" routerLinkActive="active"  >Interview</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" routerLink="/department"  >Department</a>
+          <a class="dropdown-item" routerLink="/technical-skills"  >Technical Skills</a>
+          <a class="dropdown-item" routerLink="/group-settings" >Group Settings</a>
+          <a class="dropdown-item" routerLink="/feedbackfields" >Feedback Fields</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav">
+      <li>
+          <a class="nav-link" routerLink="">Welcome! {{userName}}</a>
+      </li>
+        <li>
+          <a class="nav-link" routerLink="/login">
+            <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+          </a>
+        </li>
+    </ul>
+  </div>
+</nav>

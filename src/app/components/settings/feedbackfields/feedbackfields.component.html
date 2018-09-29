@@ -1,0 +1,86 @@
+<div class="card bg-secondary text-white  mt-2" *ngIf="action=='add' || action=='edit'">
+  <div class="card-header">
+    <strong>Feedback Fields</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <form [formGroup]="feedBackFieldsForm" class="form-horizontal" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('feedbackFieldName')">
+          <label for="feedbackFieldName">Feedback Skill</label>
+          <input type="text" class="form-control" id="feedbackFieldName" formControlName="feedbackFieldName" placeholder="Feedback Field Name">
+          <app-field-error-display [displayError]="isFieldValid('feedbackFieldName')" errorMsg="Feedback Field Name is required"></app-field-error-display>
+        </div>
+        <div class="form-group col-md-4" [ngClass]="displayFieldCss('technicalSkillID')">
+          <label for="technicalSkillID">Technical SKill</label>
+          <select id="technicalSkillID" class="form-control" formControlName="technicalSkillID" name="technicalSkillID">
+            <option selected></option>
+            <option *ngFor="let technicalSkill of alltechnicallSkillsModel" [value]="technicalSkill.technicalSkillID">
+              {{ technicalSkill.technicalSkillName }}
+            </option>
+          </select>
+          <app-field-error-display [displayError]="isFieldValid('technicalSkillID')" errorMsg="Technical Skill is required"></app-field-error-display>
+        </div>
+      </div>
+
+      <div class="form-group col-md-12 text-right">
+        <button type="button" class="btn btn-" title="Back to Feedbcak Fileds List" (click)="goBack()">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <button type="submit" class="btn btn-success" title="Save Feedbcak Fileds" [disabled]="!feedBackFieldsForm.valid">
+          <i class="fa fa-save" aria-hidden="true"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card bg-secondary text-white mt-2" *ngIf="action=='list'">
+  <div class="card-header">
+    <strong>FeedBack Fields</strong>
+  </div>
+  <div class="card-body bg-light text-dark">
+    <div *ngIf="action=='list'" class="row">
+      <div class="col-md-12 text-left">
+        <button type="button" class="btn btn-info" title="Add Feedback Field" (click)="add()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <p-table #dt [columns]="cols" [value]="gridData" [paginator]="true" [rows]="10" [resizableColumns]="true" autoLayout="true"
+            [globalFilterFields]="['feedbackFieldName','technicalSkillName']">
+            <ng-template pTemplate="caption">
+              <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="20" placeholder="Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" pResizableColumn>
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field" *ngIf="col.header!='Action' && col.header != 'Sr.No'"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-columns="columns" let-i="rowIndex">
+              <tr>
+                <td style="width: 5em;">{{i + 1}}</td>
+                <td>{{ data.feedbackFieldName }}</td>
+                <td>{{ data.technicalSkillName }}</td>
+                <td style="width: 6em;" class="text-center">
+                  <button type="button" class="btn btn-info btn-sm" title="Edit Feedback Fields" (click)="edit(data.feedbackFieldId)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
